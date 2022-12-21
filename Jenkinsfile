@@ -50,23 +50,35 @@ pipeline {
         }
     }
 
-    stage('Build Docker Image') {
-        steps {
-            script {
-                dockerImage = docker.build('tech365/currency-devops');
+//     stage('Build Docker Image') {
+//         steps {
+//             script {
+//                 dockerImage = docker.build('tech365/currency-devops');
+//             }
+//         }
+//     }
+        
+            stage('Build'){
+            steps{
+                withDockerRegistry(
+                    [credentialsId:"dockerid", url: ""]
+                )  {
+                    script{
+                    app = docker.build("currency-devops")
+                    }
+                }
             }
         }
-    }
 
     stage('push docker image') {
         steps {
             script {
                 docker.withRegistry('', 'dockerhub') {
-                    dockerImage.push();
                     dockerImage.push('latest');
                 }
             }
         }
     }
+        
     }
 }
