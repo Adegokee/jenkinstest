@@ -21,13 +21,12 @@ pipeline {
     }
 
     stages {
-        stage('Checkout')
-{
+        stage('Checkout'){
             steps {
                 sh 'mvn --version'
             }
 }
-    }
+    
 
     stage('Compile') {
         steps {
@@ -54,7 +53,7 @@ pipeline {
     stage('Build Docker Image') {
         steps {
             script {
-                dockerImage = docker.build('tech365/currency-devops')
+                dockerImage = docker.build('tech365/currency-devops');
             }
         }
     }
@@ -63,10 +62,11 @@ pipeline {
         steps {
             script {
                 docker.withRegistry('', 'dockerhub') {
-                    dockerImage.push()
-                    dockerImage.push('latest')
+                    dockerImage.push();
+                    dockerImage.push('latest');
                 }
             }
         }
+    }
     }
 }
